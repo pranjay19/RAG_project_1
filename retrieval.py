@@ -91,22 +91,26 @@ class NotesRetriever:
 
         self.bm25 = BM25Okapi(tokenized_docs)
 
-        # Use MPS for neural model inference
-        if not torch.backends.mps.is_available():
-            raise RuntimeError("Apple MPS is unavailable.")
+        # Select hardware device (Apple MPS, NVIDIA CUDA, or standard CPU)
+        if torch.backends.mps.is_available():
+            device = "mps"
+        elif torch.cuda.is_available():
+            device = "cuda"
+        else:
+            device = "cpu"
 
-        print("Loading embedding model...")
+        print(f"Loading embedding model on {device}...")
 
         self.embedder = SentenceTransformer(
             EMBEDDING_MODEL,
-            device="mps"
+            device=device
         )
 
-        print("Loading reranker...")
+        print(f"Loading reranker on {device}...")
 
         self.reranker = CrossEncoder(
             RERANKER_MODEL,
-            device="mps"
+            device=device
         )
 
 

@@ -83,17 +83,19 @@ def extract_and_chunk_pdf(pdf_path):
 
 def build_database(chunks, metadata, ids):
 
-    # Use Apple's GPU for model inference
-    if not torch.backends.mps.is_available():
-        raise RuntimeError(
-            "Apple MPS GPU is unavailable. Check your PyTorch installation."
-        )
+    # Select hardware device (Apple MPS, NVIDIA CUDA, or CPU)
+    if torch.backends.mps.is_available():
+        device = "mps"
+    elif torch.cuda.is_available():
+        device = "cuda"
+    else:
+        device = "cpu"
 
-    print("Loading embedding model on Apple MPS GPU...")
+    print(f"Loading embedding model on {device}...")
 
     model = SentenceTransformer(
         MODEL_NAME,
-        device="mps"
+        device=device
     )
 
     print("Generating embeddings...")

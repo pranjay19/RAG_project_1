@@ -7,9 +7,6 @@ venv/
 .env
 .env*.local
 
-# Local vector database
-chroma_db/
-
 # PDF documents (keep data directory tracked via .gitkeep)
 data/*.pdf
 !data/.gitkeep

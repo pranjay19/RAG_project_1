@@ -17,8 +17,17 @@ BASE_DIR = Path(__file__).resolve().parent
 
 load_dotenv(BASE_DIR / ".env")
 
-API_KEY = os.getenv("OPENROUTER_API_KEY", "").strip()
-MODEL_NAME = os.getenv("OPENROUTER_MODEL", "").strip()
+# Read from .env first, fallback to Streamlit Cloud secrets
+API_KEY = os.getenv("OPENROUTER_API_KEY")
+if not API_KEY and "OPENROUTER_API_KEY" in st.secrets:
+    API_KEY = st.secrets["OPENROUTER_API_KEY"]
+
+MODEL_NAME = os.getenv("OPENROUTER_MODEL")
+if not MODEL_NAME and "OPENROUTER_MODEL" in st.secrets:
+    MODEL_NAME = st.secrets["OPENROUTER_MODEL"]
+
+API_KEY = (API_KEY or "").strip()
+MODEL_NAME = (MODEL_NAME or "").strip()
 
 
 # ==========================================
