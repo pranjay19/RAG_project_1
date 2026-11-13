@@ -1,0 +1,39 @@
+# Virtual environment
+.venv/
+env/
+venv/
+
+# Environment Variables & Keys
+.env
+.env*.local
+
+# Local vector database
+chroma_db/
+
+# PDF documents (keep data directory tracked via .gitkeep)
+data/*.pdf
+!data/.gitkeep
+
+# Evaluation runtime files
+evaluation_labels.json
+
+# Python cache & artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Agent / Tool symlinks
+.agents/
+.claude/
+
+# IDE & Editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
