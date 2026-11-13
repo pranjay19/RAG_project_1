@@ -17,18 +17,18 @@ Rather than relying on basic vector search (which often misses exact acronyms, m
 ```mermaid
 flowchart TD
     subgraph Ingestion["1. Document Ingestion (ingest.py)"]
-        PDF["data/ai_engineering_handbook.pdf"] -->|PyMuPDF| Chunks["Text Chunks (~140 words)"]
-        Chunks -->|SentenceTransformer (MPS/GPU)| Embeddings["384-d Dense Vectors (all-MiniLM-L6-v2)"]
-        Embeddings --> ChromaDB[("ChromaDB Vector Store (chroma_db/)")]
+        PDF["data/ai_engineering_handbook.pdf"] -->|"PyMuPDF"| Chunks["Text Chunks (~140 words)"]
+        Chunks -->|"SentenceTransformer (MPS/GPU)"| Embeddings["384-d Dense Vectors (all-MiniLM-L6-v2)"]
+        Embeddings --> ChromaDB[("ChromaDB Vector Store")]
     end
 
     subgraph HybridSearch["2. Hybrid Retrieval Engine (retrieval.py)"]
         Query["Student Query"] --> BM25["BM25 Keyword Search (Exact Tokens / TF-IDF)"]
         Query --> Vector["Dense Vector Search (Cosine Similarity in ChromaDB)"]
-        BM25 -->|Top 10 IDs| RRF["Reciprocal Rank Fusion (RRF)"]
-        Vector -->|Top 10 IDs| RRF
-        RRF -->|Candidate Pool| CrossEncoder["Cross-Encoder Reranker (ms-marco-MiniLM-L6-v2)"]
-        CrossEncoder -->|Top 5 Passages| Evidence["Ranked Evidence Passages [S1]...[S5]"]
+        BM25 -->|"Top 10 IDs"| RRF["Reciprocal Rank Fusion (RRF)"]
+        Vector -->|"Top 10 IDs"| RRF
+        RRF -->|"Candidate Pool"| CrossEncoder["Cross-Encoder Reranker (ms-marco-MiniLM-L6-v2)"]
+        CrossEncoder -->|"Top 5 Passages"| Evidence["Ranked Evidence Passages (S1 to S5)"]
     end
 
     subgraph Generation["3. Synthesis & UI (app.py)"]
